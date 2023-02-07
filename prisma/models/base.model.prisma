@@ -1,5 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// NO MODIFICAR EL ARCHIVO DE ESQUEMA GENERAL (schema.prisma), ES AUTOGENERADO GRACIAS A PRISMA-IMPORT
 
 generator client {
   provider = "prisma-client-js"
