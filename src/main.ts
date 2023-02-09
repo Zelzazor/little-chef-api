@@ -1,5 +1,8 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
+import * as SegfaultHandler from 'segfault-handler';
+
+SegfaultHandler.registerHandler('crash.log');
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
