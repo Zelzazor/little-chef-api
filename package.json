@@ -10,7 +10,7 @@
     "schema:generate": "node node_modules/prisma-import/dist -f && npx prisma generate",
     "prepare:husky": "husky install",
     "prebuild": "rimraf dist",
-    "build": "node node_modules/prisma-import/dist -f && npx prisma generate; nest build",
+    "build": "npm run schema:generate; nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "npm run schema:generate; nest start --watch",
@@ -32,8 +32,7 @@
     "prisma-import": "^1.0.4",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
-    "rxjs": "^7.2.0",
-    "segfault-handler": "^1.3.0"
+    "rxjs": "^7.2.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
