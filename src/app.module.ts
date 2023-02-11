@@ -11,7 +11,7 @@ import { AuthzModule } from './modules/authz/authz.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    AuthzModule
+    AuthzModule,
   ],
   controllers: [AppController],
   providers: [AppService],
