@@ -4,6 +4,8 @@ import {Ingredient} from "./ingredient.model"
 
 model RecipeIngredient {
   id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  quantity Int
+  measure_unit String
   recipe Recipe @relation(fields: [recipeId], references: [id])
   ingredient Ingredient @relation(fields: [ingredientId], references: [id])
   recipeId String @db.Uuid
