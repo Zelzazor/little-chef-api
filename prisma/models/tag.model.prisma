@@ -8,6 +8,5 @@ model Tag {
   recipeTags      RecipeTag[]
   tagTypeId       String        @db.Uuid
   tagType         TagType       @relation(fields: [tagTypeId], references: [id])
-  tagExperienceId String        @db.Uuid
   tagExperience   TagExperience?
 }
