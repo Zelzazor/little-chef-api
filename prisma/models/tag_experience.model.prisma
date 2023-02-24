@@ -1,0 +1,8 @@
+import { Tag } from "./tag.model"
+
+model TagExperience {
+  id               String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  experienceAmount Int
+  tagId            String @db.Uuid @unique
+  tag              Tag    @relation(fields: [tagId], references: [id])
+}

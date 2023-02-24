@@ -1,0 +1,8 @@
+import { Tag } from "./tag.model"
+
+model TagType {
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  name String
+  description String
+  tags Tag[]
+}

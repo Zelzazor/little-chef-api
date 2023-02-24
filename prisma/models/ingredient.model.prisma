@@ -1,0 +1,8 @@
+import { RecipeIngredient } from "./recipe_ingredient.model"
+
+
+model Ingredient {
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  name String
+  recipes RecipeIngredient[]
+}

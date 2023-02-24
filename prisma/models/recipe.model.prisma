@@ -1,0 +1,13 @@
+import { RecipeTag } from "./recipe_tag.model"
+import { RecipeIngredient } from "./recipe_ingredient.model"
+
+
+model Recipe {
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  name String
+  imageUrl String
+  recipeSteps String
+  tags RecipeTag[]
+  ingredients RecipeIngredient[]
+  views Int @default(0)
+}
