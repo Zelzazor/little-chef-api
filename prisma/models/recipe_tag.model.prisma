@@ -1,0 +1,10 @@
+import { Tag } from "./tag.model"
+import { Recipe } from "./recipe.model"
+
+model RecipeTag {
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  recipe Recipe @relation(fields: [recipeId], references: [id])
+  recipeId String @db.Uuid
+  tag Tag @relation(fields: [tagId], references: [id])
+  tagId String @db.Uuid
+}

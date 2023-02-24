@@ -1,0 +1,12 @@
+import { TagType } from "./tag_type.model"
+import { TagExperience } from "./tag_experience.model"
+import { RecipeTag } from "./recipe_tag.model"
+
+model Tag {
+  id              String        @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name            String
+  recipeTags      RecipeTag[]
+  tagTypeId       String        @db.Uuid
+  tagType         TagType       @relation(fields: [tagTypeId], references: [id])
+  tagExperience   TagExperience?
+}
