@@ -70,7 +70,8 @@
     "import": {
       "schemas": "prisma/models/*.model.prisma",
       "output": "prisma/schema.prisma"
-    }
+    },
+    "seed": "ts-node prisma/seed.ts"
   },
   "jest": {
     "moduleFileExtensions": [
