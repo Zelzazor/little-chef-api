@@ -9,4 +9,7 @@ model Tag {
   tagTypeId       String        @db.Uuid
   tagType         TagType       @relation(fields: [tagTypeId], references: [id])
   tagExperience   TagExperience?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
 }
