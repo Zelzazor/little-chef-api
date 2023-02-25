@@ -1,0 +1,8 @@
+import { User } from "user.model"
+
+
+model Role {
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  name String
+  users User[]
+}
