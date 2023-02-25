@@ -1,9 +1,10 @@
 import { PrismaClient } from '@prisma/client';
+import { rolesSeed } from './seeds/role.seed';
 import { Seed } from './seeds/types';
 
 const prisma = new PrismaClient();
 
-const seeds: Seed[] = [];
+const seeds: Seed[] = [rolesSeed];
 
 function seed() {
   seeds.map((seed) => {
