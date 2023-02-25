@@ -9,7 +9,7 @@ model User {
   name String?
   nickName String?
   email String
-  birth_date DateTime?
+  birthDate DateTime?
   roleId String @db.Uuid
   Role Role @relation(fields: [roleId], references: [id])
 }
