@@ -1,0 +1,16 @@
+import { Role } from "./role.model"
+
+
+model User {
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  subject String @unique
+  name String?
+  nickName String?
+  email String
+  birthDate DateTime?
+  roleId String @db.Uuid
+  Role Role @relation(fields: [roleId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}

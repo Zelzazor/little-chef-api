@@ -1,9 +1,10 @@
-import { Tag } from "./tag.model"
+import { User } from "user.model"
 
-model TagType {
+
+model Role {
   id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
   name String
-  tags Tag[]
+  users User[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?

@@ -10,4 +10,7 @@ model Recipe {
   tags RecipeTag[]
   ingredients RecipeIngredient[]
   views Int @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
 }
