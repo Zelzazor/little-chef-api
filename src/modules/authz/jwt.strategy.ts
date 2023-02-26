@@ -62,6 +62,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         data: {
           subject: payload.sub,
           email: data.email,
+          name: payload.sub.includes('google') ? data.name : data.nickname,
           roleId: roleUser.id
         }
       })
