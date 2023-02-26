@@ -6,7 +6,7 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @UseGuards(AuthGuard('jwt')) // Temporal
+  @UseGuards(AuthGuard()) // Temporal
   @Get()
   async test() {
     return;
