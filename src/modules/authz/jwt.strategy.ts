@@ -40,7 +40,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(req: Request, payload: JwtPayload): Promise<JwtPayload> {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
 
-    const config = { 
+    const config = {
       headers: {
         Authorization: `Bearer ${token}`
       }
@@ -51,7 +51,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         subject: payload.sub
       }
     })
-    if(!user) {
+    if (!user) {
       const { data } = await lastValueFrom(this.httpService.get(`${this.configService.get('AUTH0_ISSUER_URL')}userinfo`, config))
       const roleUser = await this.prismaService.role.findFirstOrThrow({
         where: {
@@ -66,6 +66,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         }
       })
     }
+
     return payload;
   }
 }
