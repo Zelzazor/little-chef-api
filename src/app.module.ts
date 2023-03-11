@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AuthzModule } from './modules/authz/authz.module';
 import { UserModule } from './modules/user/user.module';
+import { RecipesModule } from './modules/recipes/recipes.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UserModule } from './modules/user/user.module';
     }),
     AuthzModule,
     UserModule,
+    RecipesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
