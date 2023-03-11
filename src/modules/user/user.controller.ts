@@ -1,15 +1,13 @@
-import { Controller, Get, RawBodyRequest, Req, UseGuards } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
-import { UserService } from './user.service';
+import { Controller, Get, RawBodyRequest, Req } from '@nestjs/common';
+import { Request } from 'express';
+import { Auth } from '../authz/auth.decorator';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) { }
-
-  @UseGuards(AuthGuard()) // Temporal
   @Get()
-  async getUser(@Req() request: RawBodyRequest<any>) {
-    return this.userService.getUserBySubject(request?.user?.sub);
+  @Auth()
+  async getUser(@Req() request: RawBodyRequest<Request>) {
+    return request.user;
   }
 
   @Get('/auth')

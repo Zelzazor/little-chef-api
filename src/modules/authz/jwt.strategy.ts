@@ -1,12 +1,13 @@
-import { PrismaService } from './../../prisma/prisma.service';
-import { Injectable } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
-import { ExtractJwt, Strategy } from 'passport-jwt';
-import { passportJwtSecret } from 'jwks-rsa';
-import { ConfigService } from '@nestjs/config';
 import { HttpService } from '@nestjs/axios';
-import { lastValueFrom } from 'rxjs';
+import { Injectable } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { PassportStrategy } from '@nestjs/passport';
+import { User } from '@prisma/client';
 import { Request } from 'express';
+import { passportJwtSecret } from 'jwks-rsa';
+import { ExtractJwt, Strategy } from 'passport-jwt';
+import { lastValueFrom } from 'rxjs';
+import { PrismaService } from './../../prisma/prisma.service';
 
 interface JwtPayload {
   iss: string;
@@ -20,13 +21,19 @@ interface JwtPayload {
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private configService: ConfigService, private prismaService: PrismaService, private httpService: HttpService) {
+  constructor(
+    private configService: ConfigService,
+    private prismaService: PrismaService,
+    private httpService: HttpService,
+  ) {
     super({
       secretOrKeyProvider: passportJwtSecret({
         cache: true,
         rateLimit: true,
         jwksRequestsPerMinute: 5,
-        jwksUri: `${configService.get('AUTH0_ISSUER_URL')}.well-known/jwks.json`,
+        jwksUri: `${configService.get(
+          'AUTH0_ISSUER_URL',
+        )}.well-known/jwks.json`,
       }),
 
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
@@ -37,37 +44,48 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(req: Request, payload: JwtPayload): Promise<JwtPayload> {
+  async validate(req: Request, payload: JwtPayload): Promise<User> {
     const token = ExtractJwt.fromAuthHeaderAsBearerToken()(req);
 
     const config = {
       headers: {
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     };
 
-    const user = await this.prismaService.user.findFirst({
+    let user = await this.prismaService.user.findFirst({
       where: {
-        subject: payload.sub
-      }
-    })
+        subject: payload.sub,
+      },
+      include: {
+        Role: true,
+      },
+    });
     if (!user) {
-      const { data } = await lastValueFrom(this.httpService.get(`${this.configService.get('AUTH0_ISSUER_URL')}userinfo`, config))
+      const { data } = await lastValueFrom(
+        this.httpService.get(
+          `${this.configService.get('AUTH0_ISSUER_URL')}userinfo`,
+          config,
+        ),
+      );
       const roleUser = await this.prismaService.role.findFirstOrThrow({
         where: {
-          name: 'User'
-        }
-      })
-      await this.prismaService.user.create({
+          name: 'User',
+        },
+      });
+      user = await this.prismaService.user.create({
         data: {
           subject: payload.sub,
           email: data.email,
           name: payload.sub.includes('google') ? data.name : data.nickname,
-          roleId: roleUser.id
-        }
-      })
+          roleId: roleUser.id,
+        },
+        include: {
+          Role: true,
+        },
+      });
     }
 
-    return payload;
+    return user;
   }
 }

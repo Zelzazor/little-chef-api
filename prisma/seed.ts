@@ -6,22 +6,39 @@ const prisma = new PrismaClient();
 
 const seeds: Seed[] = [rolesSeed];
 
-function seed() {
-  seeds.map((seed) => {
-    Promise.all(
-      seed.data.map((item) =>
-        (prisma[seed.entity as keyof typeof prisma] as any).create({
-          data: item,
-        }),
-      ),
-    )
-      .then(() =>
-        console.info(`[SEED] Successfully created ${seed.entity} records`),
-      )
-      .catch((e) =>
-        console.error(`[SEED] Failed to create ${seed.entity} records`, e),
-      );
-  });
+async function seed() {
+  const result = Promise.all(
+    seeds.map(async (seed) => {
+      try {
+        const seedResult = await Promise.all(
+          seed.data.map(async (item) => {
+            const itemResult = (
+              prisma[seed.entity as keyof typeof prisma] as any
+            ).create({
+              data: item,
+            });
+            return itemResult;
+          }),
+        );
+        console.log(`[SEED] Created ${seed.entity} records`);
+        return seedResult;
+      } catch (e) {
+        console.error(`[SEED] Failed to create ${seed.entity} records`, e);
+        return null;
+      }
+    }),
+  );
+
+  return result;
 }
 
-seed();
+seed()
+  .then(async () => {
+    console.log('[SEED] Seeding complete');
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
