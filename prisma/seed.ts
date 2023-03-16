@@ -1,10 +1,18 @@
 import { PrismaClient } from '@prisma/client';
+import { ingredientsSeed } from './seeds/Ingredient.seed';
+import { recipesSeed } from './seeds/recipe.seed';
+import { recipeIngredientsSeed } from './seeds/recipeIngredient.seed';
 import { rolesSeed } from './seeds/role.seed';
 import { Seed } from './seeds/types';
 
 const prisma = new PrismaClient();
 
-const seeds: Seed[] = [rolesSeed];
+const seeds: Seed[] = [
+  rolesSeed,
+  ingredientsSeed,
+  recipesSeed,
+  recipeIngredientsSeed,
+];
 
 async function seed() {
   const result = Promise.all(

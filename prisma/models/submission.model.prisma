@@ -1,0 +1,10 @@
+import {Recipe} from "./recipe.model"
+
+
+model submission {
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  image_url String
+  approved Boolean
+  user_id String @db.Uuid
+  recipeId String @db.Uuid
+}

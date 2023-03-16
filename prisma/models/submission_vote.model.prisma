@@ -1,0 +1,10 @@
+import {Recipe} from "./recipe.model"
+import {Ingredient} from "./ingredient.model"
+
+
+model submission_vote {
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  is_upvote Boolean
+  user_id String @db.Uuid
+  submission_id String @db.Uuid
+}
