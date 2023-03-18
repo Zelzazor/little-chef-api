@@ -1,9 +1,10 @@
 import { PrismaClient } from '@prisma/client';
-import { ingredientsSeed } from './seeds/Ingredient.seed';
+import { ingredientsSeed } from './seeds/ingredient.seed';
 import { recipesSeed } from './seeds/recipe.seed';
 import { recipeIngredientsSeed } from './seeds/recipeIngredient.seed';
 import { rolesSeed } from './seeds/role.seed';
 import { Seed } from './seeds/types';
+import { userSeed } from './seeds/user.seed';
 
 const prisma = new PrismaClient();
 
@@ -12,15 +13,16 @@ const seeds: Seed[] = [
   ingredientsSeed,
   recipesSeed,
   recipeIngredientsSeed,
+  userSeed,
 ];
 
 async function seed() {
-  const result = Promise.all(
+  const result = await Promise.all(
     seeds.map(async (seed) => {
       try {
         const seedResult = await Promise.all(
           seed.data.map(async (item) => {
-            const itemResult = (
+            const itemResult = await (
               prisma[seed.entity as keyof typeof prisma] as any
             ).create({
               data: item,
