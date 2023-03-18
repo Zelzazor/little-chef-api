@@ -6,7 +6,7 @@ import { SubmissionVote } from "./submission_vote.model"
 model Submission {
   id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
   imageUrl String
-  status Status @default(PENDING)
+  status SubmissionStatus @default(PENDING)
   userId String @db.Uuid
   recipeId String @db.Uuid
   user User @relation(fields: [userId], references: [id])
@@ -17,7 +17,7 @@ model Submission {
   deletedAt DateTime?
 }
 
-enum Status {
+enum SubmissionStatus {
   PENDING
   APPROVED
   REJECTED
