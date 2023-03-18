@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Status as SubmissionStatus } from '@prisma/client';
+import { SubmissionStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 @Injectable()
 export class VoteService {
