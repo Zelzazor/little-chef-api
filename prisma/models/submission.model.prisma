@@ -1,10 +1,13 @@
 import {Recipe} from "./recipe.model"
 
 
-model submission {
+model Submission {
   id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
-  image_url String
+  imageUrl String
   approved Boolean
-  user_id String @db.Uuid
+  userId String @db.Uuid
   recipeId String @db.Uuid
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
 }
