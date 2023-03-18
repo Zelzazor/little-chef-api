@@ -10,6 +10,8 @@
     "schema:generate": "node node_modules/prisma-import/dist -f && npx prisma generate",
     "schema:generate:migrate": "node node_modules/prisma-import/dist -f && npx prisma generate && npx prisma migrate dev --name",
     "schema:deploy": "node node_modules/prisma-import/dist -f && npx prisma generate && npx prisma migrate deploy",
+    "schema:seed": "prisma db seed",
+    "schema:reset": "prisma migrate reset",
     "prepare:husky": "husky install",
     "prebuild": "rimraf dist",
     "build": "npm run schema:deploy; nest build",
