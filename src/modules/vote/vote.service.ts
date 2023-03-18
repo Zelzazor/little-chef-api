@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
+import { Status as SubmissionStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
-
 @Injectable()
 export class VoteService {
   constructor(private prisma: PrismaService) {}
@@ -17,24 +17,25 @@ export class VoteService {
   }
 
   async randomUnvotedSubmission(id: string) {
-    const votedSubmissionsIds: any = (
-      await this.prisma.submissionVote.findMany({
-        select: { submissionId: true },
-        where: { userId: id },
-      })
-    ).map((items) => items.submissionId);
-
-    const where = { NOT: { id: { in: votedSubmissionsIds } } };
-
-    const unvotedSubmissionsCount = await this.prisma.submission.count({
-      where,
+    const submissionsWithoutVotes = await this.prisma.submission.findMany({
+      select: {
+        id: true,
+        imageUrl: true,
+        recipeId: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      take: 5,
+      where: {
+        votes: { none: { userId: id } },
+        status: SubmissionStatus.PENDING,
+      },
     });
-    const skip = Math.floor(Math.random() * unvotedSubmissionsCount);
-    const unvotedSubmission: any = await this.prisma.submission.findMany({
-      take: 1,
-      skip,
-      where,
-    });
+
+    const randomIndex = Math.floor(
+      Math.random() * submissionsWithoutVotes.length,
+    );
+    const unvotedSubmission = submissionsWithoutVotes[randomIndex];
 
     return unvotedSubmission;
   }
