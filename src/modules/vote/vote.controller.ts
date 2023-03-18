@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
@@ -25,9 +26,14 @@ export class VoteController {
   @Post(':id')
   @Auth()
   async postVote(
+    @Body() body: any,
     @Req() request: RawBodyRequest<Request>,
     @Param('id') submissionId: string,
   ) {
-    return await this.voteService.voteSubmission();
+    return await this.voteService.voteSubmission(
+      request.user?.id || '',
+      submissionId,
+      body.isUpvote,
+    );
   }
 }

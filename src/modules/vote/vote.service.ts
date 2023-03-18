@@ -4,7 +4,15 @@ import { PrismaService } from '../../prisma/prisma.service';
 @Injectable()
 export class VoteService {
   constructor(private prisma: PrismaService) {}
-  voteSubmission() {
+  async voteSubmission(
+    userId: string,
+    submissionId: string,
+    isUpvote: boolean,
+  ) {
+    const test = await this.prisma.submissionVote.create({
+      data: { userId, submissionId, isUpvote: !!isUpvote },
+    });
+    console.log(test);
     return { msg: 'submission voted' };
   }
 
