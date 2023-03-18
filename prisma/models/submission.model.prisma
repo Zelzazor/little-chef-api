@@ -1,13 +1,24 @@
-import {Recipe} from "./recipe.model"
+import { Recipe } from "./recipe.model"
+import { User } from "./user.model"
+import { SubmissionVote } from "./submission_vote.model"
 
 
 model Submission {
   id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
   imageUrl String
-  approved Boolean
+  status Status @default(PENDING)
   userId String @db.Uuid
   recipeId String @db.Uuid
+  user User @relation(fields: [userId], references: [id])
+  recipe Recipe @relation(fields: [recipeId], references: [id])
+  votes SubmissionVote[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
+}
+
+enum Status {
+  PENDING
+  APPROVED
+  REJECTED
 }

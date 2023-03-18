@@ -1,5 +1,6 @@
 import { RecipeTag } from "./recipe_tag.model"
 import { RecipeIngredient } from "./recipe_ingredient.model"
+import { Submission } from "./submission.model"
 
 
 model Recipe {
@@ -9,6 +10,7 @@ model Recipe {
   recipeSteps String
   tags RecipeTag[]
   ingredients RecipeIngredient[]
+  submissions Submission[]
   views Int @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
