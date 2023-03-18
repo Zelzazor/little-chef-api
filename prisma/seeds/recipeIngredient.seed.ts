@@ -14,8 +14,8 @@ const recipeIngredients: RecipeIngredient[] = [
     deletedAt: null,
   },
   {
-    id: '61e2266c-dcf6-4a2a-8776-68c93b306c22',
-    recipeId: 'b2c3d4e5-f6a7-8901-bcde-f12345678901', // Replace with a valid Recipe id
+    id: '51499a09-138d-458c-9b5a-4ff928254659',
+    recipeId: 'a533c2fa-a445-4b88-bf99-5ec62a509dcb', // Replace with a valid Recipe id
     ingredientId: 'bc9316c8-6a73-4c5c-9a94-d6b15b13b4b1', // Replace with a valid Ingredient id
     measure_unit: 'cups',
     quantity: 2,
