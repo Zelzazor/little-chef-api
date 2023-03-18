@@ -1,19 +1,33 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
-import { RandomSubmissionQueryDto } from './dto/random-submission-query.dto';
-import { VoteSubmissionDto } from './dto/vote-submission.dto';
+import {
+  Controller,
+  Get,
+  Param,
+  Post,
+  RawBodyRequest,
+  Req,
+} from '@nestjs/common';
+import { Request } from 'express';
+import { Auth } from '../authz/auth.decorator';
 import { VoteService } from './vote.service';
 
 @Controller('vote')
 export class VoteController {
   constructor(private readonly voteService: VoteService) {}
 
-  @Get('random')
-  getRandomSubmission(@Query() { userId }: RandomSubmissionQueryDto) {
-    return this.voteService.getRandomSubmission(userId);
+  @Get('submission')
+  @Auth()
+  async findOne(@Req() request: RawBodyRequest<Request>) {
+    return await this.voteService.randomUnvotedSubmission(
+      request.user?.id || '',
+    );
   }
 
-  @Post()
-  voteSubmission(@Body() voteSubmissionDto: VoteSubmissionDto) {
-    return this.voteService.voteSubmission(voteSubmissionDto);
+  @Post(':id')
+  @Auth()
+  async postVote(
+    @Req() request: RawBodyRequest<Request>,
+    @Param('id') submissionId: string,
+  ) {
+    return await this.voteService.voteSubmission();
   }
 }

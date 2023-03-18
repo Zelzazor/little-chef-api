@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { RecipesModule } from '../recipes/recipes.module';
+import { AuthzModule } from './../authz/authz.module';
 import { VoteController } from './vote.controller';
 import { VoteService } from './vote.service';
 
 @Module({
-  imports: [RecipesModule],
+  imports: [AuthzModule],
   controllers: [VoteController],
   providers: [VoteService],
 })

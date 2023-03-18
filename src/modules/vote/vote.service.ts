@@ -1,34 +1,33 @@
 import { Injectable } from '@nestjs/common';
-import { Recipe } from '@prisma/client';
-import { PrismaService } from 'src/prisma/prisma.service';
-import { RecipesService } from '../recipes/recipes.service';
-import { VoteSubmissionDto } from './dto/vote-submission.dto';
+import { PrismaService } from '../../prisma/prisma.service';
 
 @Injectable()
 export class VoteService {
-  constructor(
-    private readonly recipesService: RecipesService,
-    private readonly prismaService: PrismaService,
-  ) {}
-
-  async getRandomSubmission(userId: string): Promise<Recipe> {
-    const recipes = await this.recipesService.findAll({});
-
-    const votedRecipeIds = (
-      await this.prismaService.submissionVote.findMany({
-        where: { user_id: userId },
-        select: { submission_id: true },
-      })
-    ).map((vote) => vote.submission_id);
-
-    const unvotedRecipes = recipes.filter(
-      (recipe) => !votedRecipeIds.includes(recipe.id),
-    );
-
-    const randomIndex = Math.floor(Math.random() * unvotedRecipes.length);
-
-    return unvotedRecipes[randomIndex];
+  constructor(private prisma: PrismaService) {}
+  voteSubmission() {
+    return { msg: 'submission voted' };
   }
 
-  async voteSubmission(voteRecipeDto: VoteSubmissionDto): Promise<Recipe> {}
+  async randomUnvotedSubmission(id: string) {
+    const votedSubmissionsIds: any = (
+      await this.prisma.submissionVote.findMany({
+        select: { submissionId: true },
+        where: { userId: id },
+      })
+    ).map((items) => items.submissionId);
+
+    const where = { NOT: { id: { in: votedSubmissionsIds } } };
+
+    const unvotedSubmissionsCount = await this.prisma.submission.count({
+      where,
+    });
+    const skip = Math.floor(Math.random() * unvotedSubmissionsCount);
+    const unvotedSubmission: any = await this.prisma.submission.findMany({
+      take: 1,
+      skip,
+      where,
+    });
+
+    return unvotedSubmission;
+  }
 }
