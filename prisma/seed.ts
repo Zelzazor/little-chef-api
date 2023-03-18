@@ -20,31 +20,32 @@ const seeds: Seed[] = [
   submissionVoteSeed,
 ];
 
-async function seed() {
-  const result = await Promise.all(
-    seeds.map(async (seed) => {
-      try {
-        const seedResult = await Promise.all(
-          seed.data.map(async (item) => {
-            const itemResult = await (
-              prisma[seed.entity as keyof typeof prisma] as any
-            ).create({
-              data: item,
-            });
-            return itemResult;
-          }),
-        );
-        console.log(`[SEED] Created ${seed.entity} records`);
-        return seedResult;
-      } catch (e) {
-        console.error(`[SEED] Failed to create ${seed.entity} records`, e);
-        return null;
+const seed = async () => {
+  const result = [];
+
+  for (const seed of seeds) {
+    try {
+      const seedResult = [];
+
+      for (const item of seed.data) {
+        const itemResult = await (
+          prisma[seed.entity as keyof typeof prisma] as any
+        ).create({
+          data: item,
+        });
+        seedResult.push(itemResult);
       }
-    }),
-  );
+
+      console.log(`[SEED] Created ${seed.entity} records`);
+      result.push(seedResult);
+    } catch (e) {
+      console.error(`[SEED] Failed to create ${seed.entity} records`, e);
+      result.push(null);
+    }
+  }
 
   return result;
-}
+};
 
 seed()
   .then(async () => {
