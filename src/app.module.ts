@@ -1,11 +1,12 @@
-import { PrismaModule } from './prisma/prisma.module';
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { ConfigModule } from '@nestjs/config';
 import { AuthzModule } from './modules/authz/authz.module';
-import { UserModule } from './modules/user/user.module';
 import { RecipesModule } from './modules/recipes/recipes.module';
+import { UserModule } from './modules/user/user.module';
+import { VoteModule } from './modules/vote/vote.module';
+import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { RecipesModule } from './modules/recipes/recipes.module';
     AuthzModule,
     UserModule,
     RecipesModule,
+    VoteModule,
   ],
   controllers: [AppController],
   providers: [AppService],

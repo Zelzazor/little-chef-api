@@ -1,4 +1,6 @@
 import { Role } from "./role.model"
+import { Submission } from "./submission.model"
+import { SubmissionVote } from "./submission_vote.model"
 
 
 model User {
@@ -10,6 +12,8 @@ model User {
   birthDate DateTime?
   roleId String @db.Uuid
   Role Role @relation(fields: [roleId], references: [id])
+  submissions Submission[]
+  votes SubmissionVote[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?
