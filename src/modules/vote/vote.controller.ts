@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Auth } from '../authz/auth.decorator';
+import { VoteSubmissionRequestDTO } from './dto/vote-submission.request.dto';
 import { VoteService } from './vote.service';
 
 @Controller('vote')
@@ -26,7 +27,7 @@ export class VoteController {
   @Post(':id')
   @Auth()
   async postVote(
-    @Body() body: any,
+    @Body() body: VoteSubmissionRequestDTO,
     @Req() request: RawBodyRequest<Request>,
     @Param('id') submissionId: string,
   ) {

@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { SubmissionStatus } from '@prisma/client';
+import { Submission, SubmissionStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { GetRandomUnvotedSubmissionResponseDto } from './dto/get-random-unvoted-submission.response.dto';
+import { VoteSubmissionResponseDTO } from './dto/vote-submission.response.dto';
 
 @Injectable()
 export class VoteService {
@@ -10,8 +12,8 @@ export class VoteService {
     userId: string,
     submissionId: string,
     isUpvote: boolean,
-  ) {
-    const submissionVote = await this.prisma.submissionVote.create({
+  ): Promise<VoteSubmissionResponseDTO> {
+    await this.prisma.submissionVote.create({
       data: { userId, submissionId, isUpvote: !!isUpvote },
     });
 
@@ -43,10 +45,12 @@ export class VoteService {
         },
       });
 
-    return submissionVote;
+    return { success: true };
   }
 
-  async randomUnvotedSubmission(id: string) {
+  async randomUnvotedSubmission(
+    id: string,
+  ): Promise<GetRandomUnvotedSubmissionResponseDto> {
     const submissionsWithoutVotes = await this.prisma.submission.findMany({
       select: {
         id: true,
@@ -67,6 +71,6 @@ export class VoteService {
     );
     const unvotedSubmission = submissionsWithoutVotes[randomIndex];
 
-    return unvotedSubmission;
+    return { submission: unvotedSubmission as Submission };
   }
 }
