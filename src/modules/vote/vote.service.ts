@@ -17,32 +17,31 @@ export class VoteService {
       data: { userId, submissionId, isUpvote: !!isUpvote },
     });
 
-    const submissionUpvoteCount = await this.prisma.submissionVote.count({
-      where: { submissionId, isUpvote: true },
-    });
+    this.prisma.submissionVote
+      .findMany({
+        where: { submissionId, isUpvote: true, deletedAt: null },
+      })
+      .then((submissionVotes) => {
+        const upvotes = submissionVotes.filter((vote) => vote.isUpvote).length;
+        const downvotes = submissionVotes.filter(
+          (vote) => !vote.isUpvote,
+        ).length;
 
-    const submissionDownvoteCount = await this.prisma.submissionVote.count({
-      where: { submissionId, isUpvote: false },
-    });
+        let status: SubmissionStatus = SubmissionStatus.PENDING;
 
-    if (submissionUpvoteCount >= 3)
-      await this.prisma.submission.update({
-        where: {
-          id: submissionId,
-        },
-        data: {
-          status: SubmissionStatus.APPROVED,
-        },
-      });
+        if (upvotes >= 3) status = SubmissionStatus.APPROVED;
+        if (downvotes >= 3) status = SubmissionStatus.REJECTED;
 
-    if (submissionDownvoteCount >= 3)
-      await this.prisma.submission.update({
-        where: {
-          id: submissionId,
-        },
-        data: {
-          status: SubmissionStatus.REJECTED,
-        },
+        if (status !== SubmissionStatus.PENDING) {
+          this.prisma.submission.update({
+            where: {
+              id: submissionId,
+            },
+            data: {
+              status,
+            },
+          });
+        }
       });
 
     return { success: true };
