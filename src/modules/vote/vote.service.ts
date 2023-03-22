@@ -48,7 +48,7 @@ export class VoteService {
     return { success: true };
   }
 
-  async randomUnvotedSubmission(
+  async getRandomUnvotedSubmission(
     id: string,
   ): Promise<GetRandomUnvotedSubmissionResponseDto> {
     const submissionsWithoutVotes = await this.prisma.submission.findMany({

@@ -18,15 +18,15 @@ export class VoteController {
 
   @Get('submission')
   @Auth()
-  async findOne(@Req() request: RawBodyRequest<Request>) {
-    return await this.voteService.randomUnvotedSubmission(
+  async getRandomUnvotedSubmission(@Req() request: RawBodyRequest<Request>) {
+    return await this.voteService.getRandomUnvotedSubmission(
       request.user?.id || '',
     );
   }
 
   @Post(':id')
   @Auth()
-  async postVote(
+  async voteSubmission(
     @Body() body: VoteSubmissionRequestDTO,
     @Req() request: RawBodyRequest<Request>,
     @Param('id') submissionId: string,
