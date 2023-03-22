@@ -16,7 +16,7 @@ import { VoteService } from './vote.service';
 export class VoteController {
   constructor(private readonly voteService: VoteService) {}
 
-  @Get('submission')
+  @Get('pending-submission')
   @Auth()
   async getRandomUnvotedSubmission(@Req() request: RawBodyRequest<Request>) {
     return await this.voteService.getRandomUnvotedSubmission(
