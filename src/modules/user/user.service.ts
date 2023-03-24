@@ -22,4 +22,13 @@ export class UserService {
       include: { Role: true },
     });
   };
+
+  updateUser = async (updatedUser: any): Promise<any> => {
+    await this.prismaService.user.update({
+      where: { subject: updatedUser.subject },
+      data: { ...updatedUser },
+    });
+
+    return { success: true };
+  };
 }
