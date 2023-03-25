@@ -21,10 +21,12 @@ export class UserController {
   }
 
   @Post()
+  @Auth()
   async updateUser(@Req() request: RawBodyRequest<Request>, @Body() body: any) {
     return await this.userService.updateUser({
-      subject: request.user?.subject,
       ...body,
+      subject: request.user?.subject,
+      id: request.user?.id,
     });
   }
 }
