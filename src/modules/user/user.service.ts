@@ -2,6 +2,7 @@ import { User } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
 import { Role } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { UpdateUserResponseDto } from './dto/update-user.response.dto';
 
 @Injectable()
 export class UserService {
@@ -23,7 +24,9 @@ export class UserService {
     });
   };
 
-  updateUser = async (updatedUser: any): Promise<any> => {
+  updateUser = async (
+    updatedUser: Partial<User>,
+  ): Promise<UpdateUserResponseDto> => {
     await this.prismaService.user.update({
       where: { subject: updatedUser.subject },
       data: { ...updatedUser },
