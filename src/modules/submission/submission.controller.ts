@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { Body, Delete, Param, Patch } from '@nestjs/common/decorators';
+import { Body, Delete, Param, Patch, Post } from '@nestjs/common/decorators';
 import { Auth } from '../authz/auth.decorator';
 import { Role } from '../authz/enums/role.enum';
 import { SubmissionService } from './submission.service';
@@ -12,6 +12,12 @@ export class SubmissionController {
   @Auth(Role.Admin)
   async getSubmissions() {
     return await this.submissionService.getSubmissions();
+  }
+
+  @Post()
+  @Auth()
+  async createSubmission(@Body() body: any) {
+    return await this.submissionService.createSubmission(body);
   }
 
   @Patch(':id')

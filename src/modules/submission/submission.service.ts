@@ -9,6 +9,14 @@ export class SubmissionService {
     return await this.prismaService.submission.findMany();
   }
 
+  async createSubmission(submission: any) {
+    const createdSubmission = await this.prismaService.submission.create({
+      data: { ...submission },
+    });
+
+    return { success: Boolean(createdSubmission) };
+  }
+
   async updateSubmission(updatedSubmission: any) {
     const resultingSubmission = await this.prismaService.submission.update({
       where: { id: updatedSubmission.id },
