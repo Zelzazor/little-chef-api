@@ -5,6 +5,8 @@ import { CreateSubmissionRequestDto } from './dto/create-submission.request.dto'
 import { CreateSubmissionResponseDto } from './dto/create-submission.response.dto';
 import { GetSubmissionsRequestDto } from './dto/get-submissions.request.dto';
 import { GetSubmissionsResponseDto } from './dto/get-submissions.response.dto';
+import { UpdateSubmissionRequestDto } from './dto/update-submission.request.dto';
+import { UpdateSubmissionResponseDto } from './dto/update-submission.response.dto';
 
 @Injectable()
 export class SubmissionService {
@@ -33,9 +35,12 @@ export class SubmissionService {
     return { success: Boolean(createdSubmission) };
   }
 
-  async updateSubmission(updatedSubmission: any) {
+  async updateSubmission(
+    id: string,
+    updatedSubmission: UpdateSubmissionRequestDto,
+  ): Promise<UpdateSubmissionResponseDto> {
     const resultingSubmission = await this.prismaService.submission.update({
-      where: { id: updatedSubmission.id },
+      where: { id },
       data: { ...updatedSubmission },
     });
 
