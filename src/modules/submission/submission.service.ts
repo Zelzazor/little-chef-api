@@ -3,6 +3,7 @@ import { Submission } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateSubmissionRequestDto } from './dto/create-submission.request.dto';
 import { CreateSubmissionResponseDto } from './dto/create-submission.response.dto';
+import { DeleteSubmissionResponseDto } from './dto/delete-submission.response.dto';
 import { GetSubmissionsRequestDto } from './dto/get-submissions.request.dto';
 import { GetSubmissionsResponseDto } from './dto/get-submissions.response.dto';
 import { UpdateSubmissionRequestDto } from './dto/update-submission.request.dto';
@@ -47,7 +48,7 @@ export class SubmissionService {
     return { success: Boolean(resultingSubmission) };
   }
 
-  async deleteSubmission(id: any) {
+  async deleteSubmission(id: string): Promise<DeleteSubmissionResponseDto> {
     const deletedSubmission = await this.prismaService.submission.delete({
       where: { id },
     });

@@ -5,6 +5,7 @@ import { Role } from '../authz/enums/role.enum';
 import { UpdateUserResponseDto } from '../user/dto/update-user.response.dto';
 import { CreateSubmissionRequestDto } from './dto/create-submission.request.dto';
 import { CreateSubmissionResponseDto } from './dto/create-submission.response.dto';
+import { DeleteSubmissionResponseDto } from './dto/delete-submission.response.dto';
 import { GetSubmissionsRequestDto } from './dto/get-submissions.request.dto';
 import { GetSubmissionsResponseDto } from './dto/get-submissions.response.dto';
 import { UpdateSubmissionRequestDto } from './dto/update-submission.request.dto';
@@ -41,7 +42,9 @@ export class SubmissionController {
 
   @Delete(':id')
   @Auth(Role.Admin)
-  async deleteSubmission(@Param('id') id: any) {
+  async deleteSubmission(
+    @Param('id') id: string,
+  ): Promise<DeleteSubmissionResponseDto> {
     return await this.submissionService.deleteSubmission(id);
   }
 }
