@@ -8,4 +8,13 @@ export class SubmissionService {
   async getSubmissions() {
     return await this.prismaService.submission.findMany();
   }
+
+  async updateSubmission(updatedSubmission: any) {
+    const resultingSubmission = await this.prismaService.submission.update({
+      where: { id: updatedSubmission.id },
+      data: { ...updatedSubmission },
+    });
+
+    return { success: Boolean(resultingSubmission) };
+  }
 }
