@@ -17,4 +17,12 @@ export class SubmissionService {
 
     return { success: Boolean(resultingSubmission) };
   }
+
+  async deleteSubmission(id: any) {
+    const deletedSubmission = await this.prismaService.submission.delete({
+      where: { id },
+    });
+
+    return { success: Boolean(deletedSubmission) };
+  }
 }

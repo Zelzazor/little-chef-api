@@ -1,5 +1,5 @@
 import { Controller, Get } from '@nestjs/common';
-import { Body, Param, Patch } from '@nestjs/common/decorators';
+import { Body, Delete, Param, Patch } from '@nestjs/common/decorators';
 import { Auth } from '../authz/auth.decorator';
 import { Role } from '../authz/enums/role.enum';
 import { SubmissionService } from './submission.service';
@@ -21,5 +21,11 @@ export class SubmissionController {
       ...body,
       id,
     });
+  }
+
+  @Delete(':id')
+  @Auth(Role.Admin)
+  async deleteSubmission(@Param('id') id: any) {
+    return await this.submissionService.deleteSubmission(id);
   }
 }
