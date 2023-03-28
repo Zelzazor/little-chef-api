@@ -2,6 +2,8 @@ import { Controller, Get } from '@nestjs/common';
 import { Body, Delete, Param, Patch, Post } from '@nestjs/common/decorators';
 import { Auth } from '../authz/auth.decorator';
 import { Role } from '../authz/enums/role.enum';
+import { CreateSubmissionRequestDto } from './dto/create-submission.request.dto';
+import { CreateSubmissionResponseDto } from './dto/create-submission.response.dto';
 import { GetSubmissionsRequestDto } from './dto/get-submissions.request.dto';
 import { GetSubmissionsResponseDto } from './dto/get-submissions.response.dto';
 import { SubmissionService } from './submission.service';
@@ -20,7 +22,9 @@ export class SubmissionController {
 
   @Post()
   @Auth()
-  async createSubmission(@Body() body: any) {
+  async createSubmission(
+    @Body() body: CreateSubmissionRequestDto,
+  ): Promise<CreateSubmissionResponseDto> {
     return await this.submissionService.createSubmission(body);
   }
 

@@ -1,5 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import { Submission } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { CreateSubmissionRequestDto } from './dto/create-submission.request.dto';
+import { CreateSubmissionResponseDto } from './dto/create-submission.response.dto';
 import { GetSubmissionsRequestDto } from './dto/get-submissions.request.dto';
 import { GetSubmissionsResponseDto } from './dto/get-submissions.response.dto';
 
@@ -17,9 +20,14 @@ export class SubmissionService {
     };
   }
 
-  async createSubmission(submission: any) {
+  async createSubmission(
+    submission: CreateSubmissionRequestDto,
+  ): Promise<CreateSubmissionResponseDto> {
     const createdSubmission = await this.prismaService.submission.create({
-      data: { ...submission },
+      data: {
+        ...(submission as Submission),
+        imageUrl: '', //Temporary until we implement image upload.
+      },
     });
 
     return { success: Boolean(createdSubmission) };
