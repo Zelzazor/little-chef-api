@@ -10,8 +10,8 @@ export class SubmissionController {
 
   @Get()
   @Auth(Role.Admin)
-  async getSubmissions() {
-    return await this.submissionService.getSubmissions();
+  async getSubmissions(@Body() body: any) {
+    return await this.submissionService.getSubmissions(body);
   }
 
   @Post()

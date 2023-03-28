@@ -5,8 +5,10 @@ import { PrismaService } from '../../prisma/prisma.service';
 export class SubmissionService {
   constructor(private prismaService: PrismaService) {}
 
-  async getSubmissions() {
-    return await this.prismaService.submission.findMany();
+  async getSubmissions(filters: any) {
+    return await this.prismaService.submission.findMany({
+      where: { ...filters },
+    });
   }
 
   async createSubmission(submission: any) {
