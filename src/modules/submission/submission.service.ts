@@ -18,7 +18,20 @@ export class SubmissionService {
   ): Promise<GetSubmissionsResponseDto> {
     return {
       submissions: await this.prismaService.submission.findMany({
-        where: { ...filters },
+        where: {
+          id: filters.id,
+          userId: filters.userId,
+          recipeId: filters.recipeId,
+          createdAt: {
+            gte: filters.dateRange?.startDate,
+            lte: filters.dateRange?.endDate,
+          },
+          deletedAt: filters.deleted
+            ? {
+                lte: new Date(),
+              }
+            : undefined,
+        },
       }),
     };
   }
