@@ -2,6 +2,8 @@ import { Controller, Get } from '@nestjs/common';
 import { Body, Delete, Param, Patch, Post } from '@nestjs/common/decorators';
 import { Auth } from '../authz/auth.decorator';
 import { Role } from '../authz/enums/role.enum';
+import { GetSubmissionsRequestDto } from './dto/get-submissions.request.dto';
+import { GetSubmissionsResponseDto } from './dto/get-submissions.response.dto';
 import { SubmissionService } from './submission.service';
 
 @Controller('submission')
@@ -10,7 +12,9 @@ export class SubmissionController {
 
   @Get()
   @Auth(Role.Admin)
-  async getSubmissions(@Body() body: any) {
+  async getSubmissions(
+    @Body() body: GetSubmissionsRequestDto,
+  ): Promise<GetSubmissionsResponseDto> {
     return await this.submissionService.getSubmissions(body);
   }
 

@@ -1,14 +1,20 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
+import { GetSubmissionsRequestDto } from './dto/get-submissions.request.dto';
+import { GetSubmissionsResponseDto } from './dto/get-submissions.response.dto';
 
 @Injectable()
 export class SubmissionService {
   constructor(private prismaService: PrismaService) {}
 
-  async getSubmissions(filters: any) {
-    return await this.prismaService.submission.findMany({
-      where: { ...filters },
-    });
+  async getSubmissions(
+    filters: GetSubmissionsRequestDto,
+  ): Promise<GetSubmissionsResponseDto> {
+    return {
+      submissions: await this.prismaService.submission.findMany({
+        where: { ...filters },
+      }),
+    };
   }
 
   async createSubmission(submission: any) {
