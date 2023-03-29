@@ -2,6 +2,16 @@ import { Controller, Get } from '@nestjs/common';
 
 import { AppService } from './app.service';
 
+// class UploadBodyDTO {
+//   @IsOptional()
+//   @IsString()
+//   name: string;
+
+//   @IsOptional()
+//   @IsString()
+//   description: string;
+// }
+
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
@@ -11,11 +21,17 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  // Example of how to use the AmazonS3FileInterceptor
   // @Post('upload')
   // @Auth(Role.Admin)
-  // @UseInterceptors(AmazonS3FileInterceptor('file', { randomFilename: true }))
-  // upload(@UploadedFile() file: Express.Multer.File) {
+  // @UseInterceptors(
+  //   AmazonS3FileInterceptor('file', { randomFilename: true }),
+  //   ParseDataInterceptor,
+  // )
+  // upload(
+  //   @UploadedFile() file: Express.Multer.File,
+  //   @Body() body: UploadBodyDTO,
+  // ) {
+  //   console.log(body);
   //   return file;
   // }
 }
