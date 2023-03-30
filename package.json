@@ -81,6 +81,10 @@
     "tsconfig-paths": "^3.10.1",
     "typescript": "^4.3.5"
   },
+  "overrides": {
+    "@nestjs/common": "^8.0.0",
+    "@nestjs/platform-express": "^8.4.7"
+  },
   "prisma": {
     "import": {
       "schemas": "prisma/models/*.model.prisma",
