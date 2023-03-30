@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { MulterExtendedModule } from 'nestjs-multer-extended';
+import { ErrorLogger } from './error.logger';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { MulterExtendedModule } from 'nestjs-multer-extended';
         },
         bucket: config.get('AWS_S3_BUCKET_NAME') ?? '',
         basePath: 'public',
+        logger: new ErrorLogger(),
       }),
       inject: [ConfigService],
     }),
