@@ -1,5 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { Body, Delete, Param, Patch, Post } from '@nestjs/common/decorators';
+import { Submission } from '@prisma/client';
+import { PaginatedQueryResponseDto } from '../../common/dto/paginated-query.response.dto';
 import { Auth } from '../authz/auth.decorator';
 import { Role } from '../authz/enums/role.enum';
 import { UpdateUserResponseDto } from '../user/dto/update-user.response.dto';
@@ -16,10 +18,9 @@ export class SubmissionController {
   constructor(private submissionService: SubmissionService) {}
 
   @Get()
-  @Auth(Role.Admin)
   async getSubmissions(
     @Body() body: GetSubmissionsRequestDto,
-  ): Promise<GetSubmissionsResponseDto> {
+  ): Promise<PaginatedQueryResponseDto<Submission[]>> {
     return await this.submissionService.getSubmissions(body);
   }
 

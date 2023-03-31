@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Submission } from '@prisma/client';
+import { PaginatedQueryResponseDto } from '../../common/dto/paginated-query.response.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateSubmissionRequestDto } from './dto/create-submission.request.dto';
 import { CreateSubmissionResponseDto } from './dto/create-submission.response.dto';
@@ -15,9 +16,10 @@ export class SubmissionService {
 
   async getSubmissions(
     filters: GetSubmissionsRequestDto,
-  ): Promise<GetSubmissionsResponseDto> {
-    return {
-      submissions: await this.prismaService.submission.findMany({
+  ): Promise<PaginatedQueryResponseDto<Submission[]>> {
+    return await this.prismaService.paginateQuery(
+      this.prismaService.submission.findMany,
+      {
         where: {
           id: filters.id,
           userId: filters.userId,
@@ -32,8 +34,9 @@ export class SubmissionService {
               }
             : undefined,
         },
-      }),
-    };
+      },
+      { page: 1, pageSize: 100 },
+    );
   }
 
   async createSubmission(
