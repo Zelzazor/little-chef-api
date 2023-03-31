@@ -1,7 +1,7 @@
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
-import { BasePaginationRequestDto } from '../common/dto/base-pagination.query.dto';
 import { PaginatedQueryResponseDto } from '../common/dto/paginated-query.response.dto';
+import { Pagination } from '../common/types/pagination';
 import { applyMiddleware } from './softDelete.middleware';
 
 @Injectable()
@@ -24,7 +24,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   async findManyPaginated<T>(
     modelName: string,
     params: any,
-    paginationOptions: BasePaginationRequestDto,
+    paginationOptions: Partial<Pagination>,
   ): Promise<PaginatedQueryResponseDto<T>> {
     const page = paginationOptions?.page || 1;
     const pageSize = paginationOptions?.pageSize || 10;
