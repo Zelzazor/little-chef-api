@@ -1,23 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { Submission } from '@prisma/client';
+import { PaginatedQueryResponseDto } from '../../common/dto/paginated-query.response.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateSubmissionRequestDto } from './dto/create-submission.request.dto';
 import { CreateSubmissionResponseDto } from './dto/create-submission.response.dto';
 import { DeleteSubmissionResponseDto } from './dto/delete-submission.response.dto';
-import { GetSubmissionsRequestDto } from './dto/get-submissions.request.dto';
 import { GetSubmissionsResponseDto } from './dto/get-submissions.response.dto';
 import { UpdateSubmissionRequestDto } from './dto/update-submission.request.dto';
 import { UpdateSubmissionResponseDto } from './dto/update-submission.response.dto';
+import { GetSubmissionFilters } from './types/get-submission-filters';
 
 @Injectable()
 export class SubmissionService {
   constructor(private prismaService: PrismaService) {}
 
   async getSubmissions(
-    filters: GetSubmissionsRequestDto,
-  ): Promise<GetSubmissionsResponseDto> {
-    return {
-      submissions: await this.prismaService.submission.findMany({
+    filters: GetSubmissionFilters,
+  ): Promise<PaginatedQueryResponseDto<GetSubmissionsResponseDto>> {
+    return await this.prismaService.findManyPaginated(
+      'submission',
+      {
         where: {
           id: filters.id,
           userId: filters.userId,
@@ -32,8 +34,9 @@ export class SubmissionService {
               }
             : undefined,
         },
-      }),
-    };
+      },
+      { page: filters.page, pageSize: filters.pageSize },
+    );
   }
 
   async createSubmission(

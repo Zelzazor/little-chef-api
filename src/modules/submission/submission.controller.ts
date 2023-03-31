@@ -1,5 +1,14 @@
 import { Controller, Get } from '@nestjs/common';
-import { Body, Delete, Param, Patch, Post } from '@nestjs/common/decorators';
+import {
+  Body,
+  Delete,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common/decorators';
+import { BasePaginationQueryDto } from '../../common/dto/base-pagination.query.dto';
+import { PaginatedQueryResponseDto } from '../../common/dto/paginated-query.response.dto';
 import { Auth } from '../authz/auth.decorator';
 import { Role } from '../authz/enums/role.enum';
 import { UpdateUserResponseDto } from '../user/dto/update-user.response.dto';
@@ -18,9 +27,10 @@ export class SubmissionController {
   @Get()
   @Auth(Role.Admin)
   async getSubmissions(
+    @Query() query: BasePaginationQueryDto,
     @Body() body: GetSubmissionsRequestDto,
-  ): Promise<GetSubmissionsResponseDto> {
-    return await this.submissionService.getSubmissions(body);
+  ): Promise<PaginatedQueryResponseDto<GetSubmissionsResponseDto>> {
+    return await this.submissionService.getSubmissions({ ...query, ...body });
   }
 
   @Post()
