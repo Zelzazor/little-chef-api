@@ -6,10 +6,6 @@ import { applyMiddleware } from './softDelete.middleware';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
-  // constructor() {
-  //   super({ log: ['query', 'info'] });
-  // }
-
   async onModuleInit() {
     await this.$connect();
     applyMiddleware(this);
