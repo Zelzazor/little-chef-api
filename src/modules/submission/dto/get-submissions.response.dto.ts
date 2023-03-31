@@ -1,5 +1,3 @@
 import { Submission } from '@prisma/client';
 
-export class GetSubmissionsResponseDto {
-  submissions: Submission[];
-}
+export class GetSubmissionsResponseDto extends Array<Submission> {}
