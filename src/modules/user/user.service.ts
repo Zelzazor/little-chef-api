@@ -1,6 +1,5 @@
-import { User } from '.prisma/client';
 import { Injectable } from '@nestjs/common';
-import { Role } from '@prisma/client';
+import { Role, User } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { UpdateUserResponseDto } from './dto/update-user.response.dto';
 

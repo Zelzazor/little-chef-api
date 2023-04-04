@@ -23,7 +23,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     paginationOptions: Partial<Pagination>,
   ): Promise<PaginatedQueryResponseDto<T>> {
     const page = paginationOptions?.page || 1;
-    const pageSize = paginationOptions?.pageSize || 10;
+    const pageSize =
+      paginationOptions?.pageSize && paginationOptions?.pageSize <= 50
+        ? paginationOptions?.pageSize
+        : 10;
 
     const extendedParams = {
       ...params,
