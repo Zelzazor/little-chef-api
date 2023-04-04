@@ -10,8 +10,10 @@ import {
 } from '@nestjs/common';
 import { Auth } from '../authz/auth.decorator';
 import { Role } from '../authz/enums/role.enum';
-import { FindRecipesBodyDto } from './dto/find-recipes-body.dto';
-import { FindRecipesQueryDto } from './dto/find-recipes-query.dto';
+import {
+  FindRecipesBodyDto,
+  FindRecipesQueryDto,
+} from './dto/find-recipes.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 import { RecipesService } from './recipes.service';
 
@@ -26,16 +28,16 @@ export class RecipesController {
   }
 
   @Get()
-  findAll(
-    @Query() { limit, skip, name }: FindRecipesQueryDto,
+  findMany(
+    @Query() { name, page, pageSize }: FindRecipesQueryDto,
     @Body() { ingredients, tags }: FindRecipesBodyDto,
   ) {
-    return this.recipesService.findAll({
+    return this.recipesService.findMany({
       name,
       ingredients,
       tags,
-      limit: Number(limit),
-      skip: Number(skip),
+      page,
+      pageSize,
     });
   }
 

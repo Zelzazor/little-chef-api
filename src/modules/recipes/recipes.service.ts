@@ -1,7 +1,9 @@
 import { Injectable } from '@nestjs/common';
+import { Recipe } from '@prisma/client';
+import { PaginatedQueryResponseDto } from 'src/common/dto/paginated-query.response.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { CreateRecipeDto } from './dto/create-recipe.dto';
-import { FindRecipeDto } from './dto/find-recipes.dto';
+import { FindRecipesDto } from './dto/find-recipes.dto';
 import { UpdateRecipeDto } from './dto/update-recipe.dto';
 
 @Injectable()
@@ -11,7 +13,13 @@ export class RecipesService {
     return createRecipeDto;
   }
 
-  findAll({ ingredients, name, limit, skip, tags }: FindRecipeDto) {
+  findMany({
+    ingredients,
+    name,
+    tags,
+    page,
+    pageSize,
+  }: FindRecipesDto): Promise<PaginatedQueryResponseDto<Array<Recipe>>> {
     const where = {
       ...(ingredients && ingredients.length > 0 && !name
         ? {
@@ -45,11 +53,13 @@ export class RecipesService {
         : {}),
     };
 
-    return this.prismaService.recipe.findMany({
-      ...(where && { where }),
-      take: limit || 10,
-      skip: skip || 0,
-    });
+    return this.prismaService.findManyPaginated(
+      'recipe',
+      {
+        ...(where && { where }),
+      },
+      { page: page ?? 1, pageSize: pageSize ?? 10 },
+    );
   }
 
   findOne(id: string) {
