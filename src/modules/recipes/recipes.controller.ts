@@ -21,13 +21,13 @@ import { RecipesService } from './recipes.service';
 export class RecipesController {
   constructor(private readonly recipesService: RecipesService) {}
 
-  @Post()
+  @Post('/create')
   @Auth(Role.Admin)
   create() {
     return true;
   }
 
-  @Get()
+  @Post()
   findMany(
     @Query() { name, page, pageSize }: FindRecipesQueryDto,
     @Body() { ingredients, tags }: FindRecipesBodyDto,
