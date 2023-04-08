@@ -1,0 +1,13 @@
+import { User } from "./user.model"
+import { Achievement } from "./achievement.model"
+
+model UserAchievement {
+  id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  userId String @db.Uuid
+  achievementId String @db.Uuid
+  user User @relation(fields: [userId], references: [id])
+  achievement Achievement @relation(fields: [achievementId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}

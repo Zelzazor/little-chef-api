@@ -1,6 +1,7 @@
 import { RecipeTag } from "./recipe_tag.model"
 import { RecipeIngredient } from "./recipe_ingredient.model"
 import { Submission } from "./submission.model"
+import { FavoriteRecipe } from "./favorite_recipe.model"
 
 
 model Recipe {
@@ -9,9 +10,10 @@ model Recipe {
   imageUrl String
   recipeSteps String
   tags RecipeTag[]
+  views Int @default(0)
   ingredients RecipeIngredient[]
   submissions Submission[]
-  views Int @default(0)
+  favoritedUsers FavoriteRecipe[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?

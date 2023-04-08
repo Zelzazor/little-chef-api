@@ -1,0 +1,18 @@
+
+import { ExperienceGainType } from "./experience_gain_type.model"
+import { User } from "./user.model"
+import { Submission } from "./submission.model"
+
+model ExperienceGain { 
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  amount Int
+  userId String @db.Uuid
+  submissionId String @db.Uuid
+  experienceGainTypeId String @db.Uuid @unique
+  users User @relation(fields: [userId], references: [id])
+  submissions Submission @relation(fields: [submissionId], references: [id])
+  experienceGainType ExperienceGainType @relation(fields: [experienceGainTypeId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}

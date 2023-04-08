@@ -1,10 +1,9 @@
-import { User } from "./user.model"
+import { ExperienceGain } from "./experience_gain.model"
 
-
-model Role {
+model ExperienceGainType {
   id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
   name String
-  users User[]
+  experienceGains ExperienceGain[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?

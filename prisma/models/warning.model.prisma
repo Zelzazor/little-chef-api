@@ -1,10 +1,11 @@
 import { User } from "./user.model"
 
-
-model Role {
+model Warning {
   id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
-  name String
-  users User[]
+  description String
+  viewed Boolean
+  userId String @db.Uuid
+  user User @relation(fields: [userId], references: [id])
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   deletedAt DateTime?

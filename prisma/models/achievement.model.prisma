@@ -1,0 +1,11 @@
+import { UserAchievement } from "./user_achievement.model"
+
+model Achievement {
+  id String @id @default(dbgenerated("uuid_generate_v4()")) @db.Uuid
+  name String
+  badgeImageUrl String
+  users UserAchievement[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
