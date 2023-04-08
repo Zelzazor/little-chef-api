@@ -3,6 +3,7 @@ import { Submission } from "./submission.model"
 import { SubmissionVote } from "./submission_vote.model"
 import { Recipe } from "./recipe.model"
 import { FavoriteRecipe } from "favorite_recipe.model"
+import { Warning } from "warning.model"
 
 
 model User {
@@ -16,6 +17,7 @@ model User {
   Role Role @relation(fields: [roleId], references: [id])
   submissions Submission[]
   votes SubmissionVote[]
+  warnings Warning[]
   favoriteRecipes FavoriteRecipe[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
