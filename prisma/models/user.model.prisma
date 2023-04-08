@@ -5,6 +5,7 @@ import { Recipe } from "./recipe.model"
 import { FavoriteRecipe } from "./favorite_recipe.model"
 import { Warning } from "./warning.model"
 import { ExperienceGain } from "./experience_gain.model"
+import { UserAchievement } from "./user_achievement.model"
 
 
 model User {
@@ -20,6 +21,7 @@ model User {
   votes SubmissionVote[]
   experienceGains ExperienceGain[]
   warnings Warning[]
+  achievements UserAchievement[]
   favoriteRecipes FavoriteRecipe[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
