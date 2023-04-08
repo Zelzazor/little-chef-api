@@ -1,0 +1,10 @@
+import { ExperienceGain } from "./experience_gain.model"
+
+model ExperienceGainType {
+  id String @id @db.Uuid @default(dbgenerated("uuid_generate_v4()"))
+  name String
+  experienceGains ExperienceGain[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
