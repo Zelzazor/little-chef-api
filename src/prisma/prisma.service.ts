@@ -35,7 +35,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
 
     const result = await model.findMany(extendedParams);
 
-    const count = await model.count(params);
+    const count = await model.count({ where: params.where });
 
     return {
       data: result,
