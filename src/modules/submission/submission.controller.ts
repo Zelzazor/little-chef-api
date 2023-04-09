@@ -6,11 +6,17 @@ import {
   Patch,
   Post,
   Query,
+  Req,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common/decorators';
+import { Request } from 'express';
+import { AmazonS3FileInterceptor } from 'nestjs-multer-extended';
 import { BasePaginationQueryDto } from '../../common/dto/base-pagination.query.dto';
 import { PaginatedQueryResponseDto } from '../../common/dto/paginated-query.response.dto';
 import { Auth } from '../authz/auth.decorator';
 import { Role } from '../authz/enums/role.enum';
+import { ParseDataInterceptor } from '../s3-upload/data.interceptor';
 import { UpdateUserResponseDto } from '../user/dto/update-user.response.dto';
 import { CreateSubmissionRequestDto } from './dto/create-submission.request.dto';
 import { CreateSubmissionResponseDto } from './dto/create-submission.response.dto';
@@ -35,10 +41,20 @@ export class SubmissionController {
 
   @Post()
   @Auth()
+  @UseInterceptors(
+    AmazonS3FileInterceptor('file', { randomFilename: true }),
+    ParseDataInterceptor,
+  )
   async createSubmission(
+    @UploadedFile() file: Express.Multer.File & { Location: string },
     @Body() body: CreateSubmissionRequestDto,
+    @Req() req: Request,
   ): Promise<CreateSubmissionResponseDto> {
-    return await this.submissionService.createSubmission(body);
+    return await this.submissionService.createSubmission({
+      userId: req.user?.id,
+      imageUrl: file.Location,
+      recipeId: body.recipeId,
+    });
   }
 
   @Patch(':id')

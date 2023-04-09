@@ -5,6 +5,8 @@ import { recipeIngredientsSeed } from './seeds/recipeIngredient.seed';
 import { rolesSeed } from './seeds/role.seed';
 import { submissionSeed } from './seeds/submission.seed';
 import { submissionVoteSeed } from './seeds/submissionVote.seed';
+import { tagsSeed } from './seeds/tag.seed';
+import { tagTypesSeed } from './seeds/tag_type.seed';
 import { Seed } from './seeds/types';
 import { userSeed } from './seeds/user.seed';
 
@@ -18,6 +20,8 @@ const seeds: Seed[] = [
   userSeed,
   submissionSeed,
   submissionVoteSeed,
+  tagTypesSeed,
+  tagsSeed,
 ];
 
 const seed = async () => {
