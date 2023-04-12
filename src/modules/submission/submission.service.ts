@@ -33,6 +33,11 @@ export class SubmissionService {
               }
             : undefined,
         },
+        include: {
+          user: { select: { id: true, nickName: true, name: true } },
+          recipe: { select: { id: true, name: true, imageUrl: true } },
+          votes: { select: { id: true, isUpvote: true } },
+        },
       },
       { page: filters.page, pageSize: filters.pageSize },
     );
