@@ -38,6 +38,9 @@ export class SubmissionService {
           recipe: { select: { id: true, name: true, imageUrl: true } },
           votes: { select: { id: true, isUpvote: true } },
         },
+        orderBy: {
+          createdAt: 'desc',
+        },
       },
       { page: filters.page, pageSize: filters.pageSize },
     );

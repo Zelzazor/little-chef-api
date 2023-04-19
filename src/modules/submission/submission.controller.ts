@@ -21,6 +21,7 @@ import { UpdateUserResponseDto } from '../user/dto/update-user.response.dto';
 import { CreateSubmissionRequestDto } from './dto/create-submission.request.dto';
 import { CreateSubmissionResponseDto } from './dto/create-submission.response.dto';
 import { DeleteSubmissionResponseDto } from './dto/delete-submission.response.dto';
+import { GetOwnSubmissionsRequestDto } from './dto/get-own-submissions.request.dto';
 import { GetSubmissionsRequestDto } from './dto/get-submissions.request.dto';
 import { GetSubmissionsResponseDto } from './dto/get-submissions.response.dto';
 import { UpdateSubmissionRequestDto } from './dto/update-submission.request.dto';
@@ -37,6 +38,20 @@ export class SubmissionController {
     @Body() body: GetSubmissionsRequestDto,
   ): Promise<PaginatedQueryResponseDto<GetSubmissionsResponseDto>> {
     return await this.submissionService.getSubmissions({ ...query, ...body });
+  }
+
+  @Post('user')
+  @Auth()
+  async getOwnSubmissions(
+    @Query() query: BasePaginationQueryDto,
+    @Body() body: GetOwnSubmissionsRequestDto,
+    @Req() req: Request,
+  ): Promise<PaginatedQueryResponseDto<GetSubmissionsResponseDto>> {
+    return await this.submissionService.getSubmissions({
+      ...query,
+      userId: req.user?.id,
+      ...body,
+    });
   }
 
   @Post()
