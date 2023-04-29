@@ -4,6 +4,6 @@ import { IngredientService } from './ingredient.service';
 
 @Module({
   controllers: [IngredientController],
-  providers: [IngredientService]
+  providers: [IngredientService],
 })
 export class IngredientModule {}
