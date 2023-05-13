@@ -33,4 +33,16 @@ export class UserService {
 
     return { success: true };
   };
+  async getNewUserCount() {
+    const endDate = new Date();
+    const startDate = new Date(endDate.getTime() - 24 * 60 * 60 * 1000);
+
+    const count = await this.prismaService.submission.count({
+      where: {
+        createdAt: { gte: startDate, lte: endDate },
+      },
+    });
+
+    return { count };
+  }
 }
