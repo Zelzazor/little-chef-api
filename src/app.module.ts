@@ -3,6 +3,7 @@ import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthzModule } from './modules/authz/authz.module';
+import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { RecipesModule } from './modules/recipes/recipes.module';
 import { S3UploadModule } from './modules/s3-upload/s3-upload.module';
 import { SubmissionModule } from './modules/submission/submission.module';
@@ -22,6 +23,7 @@ import { PrismaModule } from './prisma/prisma.module';
     SubmissionModule,
     VoteModule,
     S3UploadModule,
+    DashboardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
