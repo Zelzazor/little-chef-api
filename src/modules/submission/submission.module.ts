@@ -8,5 +8,6 @@ import { SubmissionService } from './submission.service';
   imports: [AuthzModule, S3UploadModule],
   controllers: [SubmissionController],
   providers: [SubmissionService],
+  exports: [SubmissionService],
 })
 export class SubmissionModule {}
