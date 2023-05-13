@@ -6,6 +6,7 @@
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "nest": "nest",
     "schema:migrate": "node node_modules/prisma-import/dist -f && npx prisma migrate dev --name",
     "schema:generate": "node node_modules/prisma-import/dist -f && npx prisma generate",
     "schema:generate:migrate": "node node_modules/prisma-import/dist -f && npx prisma generate && npx prisma migrate dev --name",
