@@ -77,4 +77,33 @@ export class SubmissionService {
 
     return { success: Boolean(deletedSubmission) };
   }
+  async countSubmissionDate() {
+    const endDate: Date = new Date();
+
+    const startDate: Date = new Date(endDate.getTime() - 24 * 60 * 60 * 1000); // 24 horas en milisegundos
+
+    const count = await this.prismaService.submission.count({
+      where: {
+        createdAt: {
+          gte: startDate,
+          lte: endDate,
+        },
+      },
+    });
+
+    console.log({ startDate }, { endDate }, { count });
+    return { count };
+  }
+  async getRecentlyDeletedSubmission() {
+    const endDate = new Date();
+    const startDate = new Date(endDate.getTime() - 24 * 60 * 60 * 1000);
+
+    const count = await this.prismaService.submission.count({
+      where: {
+        deletedAt: { not: null, gte: startDate, lte: endDate },
+      },
+    });
+
+    return { count };
+  }
 }
