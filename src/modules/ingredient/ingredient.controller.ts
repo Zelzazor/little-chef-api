@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Query } from '@nestjs/common';
+import { Body, Controller, Post, Query } from '@nestjs/common';
 import { BasePaginationQueryDto } from '../../common/dto/base-pagination.query.dto';
 import { PaginatedQueryResponseDto } from '../../common/dto/paginated-query.response.dto';
 import { GetIngredientsResponseDto } from './dto/get-ingredents.response.dto';
@@ -9,7 +9,7 @@ import { IngredientService } from './ingredient.service';
 export class IngredientController {
   constructor(private ingredientService: IngredientService) {}
 
-  @Get()
+  @Post()
   async getIngredients(
     @Query() query: BasePaginationQueryDto,
     @Body() body: GetIngredientsRequestDto,
