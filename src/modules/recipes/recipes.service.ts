@@ -139,4 +139,9 @@ export class RecipesService {
   remove(id: string) {
     return `This action removes a ${id} recipe`;
   }
+
+  async countAll() {
+    const count = await this.prismaService.recipe.count();
+    return { count };
+  }
 }

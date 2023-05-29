@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Role, User } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
+import { GetDashboardMetricsRequestDto } from '../dashboard/dto/get-dashboard-metrics-request.dto';
 import { UpdateUserResponseDto } from './dto/update-user.response.dto';
 
 @Injectable()
@@ -33,4 +34,16 @@ export class UserService {
 
     return { success: true };
   };
+  async getNewUserCount(body: GetDashboardMetricsRequestDto) {
+    const count = await this.prismaService.submission.count({
+      where: {
+        createdAt: {
+          gte: body.dateRange?.startDate,
+          lte: body.dateRange?.endDate,
+        },
+      },
+    });
+
+    return { count };
+  }
 }

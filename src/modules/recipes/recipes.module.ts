@@ -8,5 +8,6 @@ import { RecipesService } from './recipes.service';
   imports: [AuthzModule, S3UploadModule],
   controllers: [RecipesController],
   providers: [RecipesService],
+  exports: [RecipesService],
 })
 export class RecipesModule {}
