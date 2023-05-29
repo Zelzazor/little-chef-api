@@ -1,5 +1,5 @@
-import { AuthzModule } from './../authz/authz.module';
 import { Module } from '@nestjs/common';
+import { AuthzModule } from './../authz/authz.module';
 import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
@@ -7,5 +7,6 @@ import { UserService } from './user.service';
   imports: [AuthzModule],
   controllers: [UserController],
   providers: [UserService],
+  exports: [UserService],
 })
 export class UserModule {}

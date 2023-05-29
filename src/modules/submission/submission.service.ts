@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Submission } from '@prisma/client';
 import { PaginatedQueryResponseDto } from '../../common/dto/paginated-query.response.dto';
 import { PrismaService } from '../../prisma/prisma.service';
+import { GetDashboardMetricsRequestDto } from '../dashboard/dto/get-dashboard-metrics-request.dto';
 import { CreateSubmissionResponseDto } from './dto/create-submission.response.dto';
 import { DeleteSubmissionResponseDto } from './dto/delete-submission.response.dto';
 import { GetSubmissionsResponseDto } from './dto/get-submissions.response.dto';
@@ -76,5 +77,30 @@ export class SubmissionService {
     });
 
     return { success: Boolean(deletedSubmission) };
+  }
+  async countSubmissionDate(body: GetDashboardMetricsRequestDto) {
+    const count = await this.prismaService.submission.count({
+      where: {
+        createdAt: {
+          gte: body.dateRange?.startDate,
+          lte: body.dateRange?.endDate,
+        },
+      },
+    });
+
+    return { count };
+  }
+  async getRecentlyDeletedSubmission(body: GetDashboardMetricsRequestDto) {
+    const count = await this.prismaService.submission.count({
+      where: {
+        deletedAt: {
+          not: null,
+          gte: body.dateRange?.startDate,
+          lte: body.dateRange?.endDate,
+        },
+      },
+    });
+
+    return { count };
   }
 }
