@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { Submission } from '@prisma/client';
 import { PaginatedQueryResponseDto } from '../../common/dto/paginated-query.response.dto';
 import { PrismaService } from '../../prisma/prisma.service';
+import { GetDashboardMetricsRequestDto } from '../dashboard/dto/get-dashboard-metrics-request.dto';
 import { CreateSubmissionResponseDto } from './dto/create-submission.response.dto';
 import { DeleteSubmissionResponseDto } from './dto/delete-submission.response.dto';
 import { GetSubmissionsResponseDto } from './dto/get-submissions.response.dto';
@@ -77,30 +78,26 @@ export class SubmissionService {
 
     return { success: Boolean(deletedSubmission) };
   }
-  async countSubmissionDate() {
-    const endDate: Date = new Date();
-
-    const startDate: Date = new Date(endDate.getTime() - 24 * 60 * 60 * 1000); // 24 horas en milisegundos
-
+  async countSubmissionDate(body: GetDashboardMetricsRequestDto) {
     const count = await this.prismaService.submission.count({
       where: {
         createdAt: {
-          gte: startDate,
-          lte: endDate,
+          gte: body.dateRange?.startDate,
+          lte: body.dateRange?.endDate,
         },
       },
     });
 
-    console.log({ startDate }, { endDate }, { count });
     return { count };
   }
-  async getRecentlyDeletedSubmission() {
-    const endDate = new Date();
-    const startDate = new Date(endDate.getTime() - 24 * 60 * 60 * 1000);
-
+  async getRecentlyDeletedSubmission(body: GetDashboardMetricsRequestDto) {
     const count = await this.prismaService.submission.count({
       where: {
-        deletedAt: { not: null, gte: startDate, lte: endDate },
+        deletedAt: {
+          not: null,
+          gte: body.dateRange?.startDate,
+          lte: body.dateRange?.endDate,
+        },
       },
     });
 

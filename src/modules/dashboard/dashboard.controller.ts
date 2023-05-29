@@ -1,7 +1,8 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post } from '@nestjs/common';
 import { Auth } from '../authz/auth.decorator';
 import { Role } from '../authz/enums/role.enum';
 import { DashboardService } from './dashboard.service';
+import { GetDashboardMetricsRequestDto } from './dto/get-dashboard-metrics-request.dto';
 
 @Controller('dashboard')
 export class DashboardController {
@@ -12,13 +13,20 @@ export class DashboardController {
   countAll() {
     return this.dashboardService.count();
   }
-  @Get('submission')
+  @Post()
+  @HttpCode(200)
   @Auth(Role.Admin)
-  async submissionDetails() {
-    const countDate = await this.dashboardService.countSubmissionDate();
-    const deletedDate =
-      await this.dashboardService.countDeletedSubmissionDate();
-    const countRecentUser = await this.dashboardService.getNewUserCount();
-    return { countDate, deletedDate, countRecentUser };
+  async submissionDetails(@Body() body: GetDashboardMetricsRequestDto) {
+    const countSubmissions = await this.dashboardService.countSubmissionDate(
+      body,
+    );
+    const countDeletedSubmissions =
+      await this.dashboardService.countDeletedSubmissionDate(body);
+    const countRecentUsers = await this.dashboardService.getNewUserCount(body);
+    return {
+      countSubmissions: countSubmissions.count,
+      countDeletedSubmissions: countDeletedSubmissions.count,
+      countRecentUsers: countRecentUsers.count,
+    };
   }
 }
