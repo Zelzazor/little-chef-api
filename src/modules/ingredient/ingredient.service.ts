@@ -8,6 +8,15 @@ import { GetIngredientsFilters } from './types/get-ingredients-filters';
 export class IngredientService {
   constructor(private prismaService: PrismaService) {}
 
+  async createIngredient(name: string) {
+    const createdIngredient = await this.prismaService.ingredient.create({
+      data: {
+        name,
+      },
+    });
+    return { success: Boolean(createdIngredient) };
+  }
+
   async getIngredients(
     filters: GetIngredientsFilters,
   ): Promise<PaginatedQueryResponseDto<GetIngredientsResponseDto>> {
@@ -30,7 +39,7 @@ export class IngredientService {
               }
             : undefined,
         },
-        orderBy: { name: 'asc' },
+        orderBy: { createdAt: 'desc' },
       },
       { page: filters.page, pageSize: filters.pageSize },
     );

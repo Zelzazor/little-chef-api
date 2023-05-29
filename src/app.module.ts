@@ -7,6 +7,7 @@ import { IngredientModule } from './modules/ingredient/ingredient.module';
 import { RecipesModule } from './modules/recipes/recipes.module';
 import { S3UploadModule } from './modules/s3-upload/s3-upload.module';
 import { SubmissionModule } from './modules/submission/submission.module';
+import { TagsModule } from './modules/tags/tags.module';
 import { UserModule } from './modules/user/user.module';
 import { VoteModule } from './modules/vote/vote.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -24,6 +25,7 @@ import { PrismaModule } from './prisma/prisma.module';
     IngredientModule,
     VoteModule,
     S3UploadModule,
+    TagsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

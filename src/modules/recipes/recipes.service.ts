@@ -2,15 +2,59 @@ import { Injectable } from '@nestjs/common';
 import { Recipe } from '@prisma/client';
 import { PaginatedQueryResponseDto } from 'src/common/dto/paginated-query.response.dto';
 import { PrismaService } from '../../prisma/prisma.service';
-import { CreateRecipeDto } from './dto/create-recipe.dto';
+import { CreateRecipeRequestDto } from './dto/create-recipe.dto';
 import { FindRecipesDto } from './dto/find-recipes.dto';
-import { UpdateRecipeDto } from './dto/update-recipe.dto';
+import { UpdateRecipeRequestDto } from './dto/update-recipe.dto';
 
 @Injectable()
 export class RecipesService {
   constructor(private prismaService: PrismaService) {}
-  create(createRecipeDto: CreateRecipeDto) {
-    return createRecipeDto;
+  async create(recipe: CreateRecipeRequestDto & { imageUrl: string }) {
+    const difficultyTags = await this.prismaService.tag.findMany({
+      where: {
+        tagType: {
+          name: 'Difficulty',
+        },
+      },
+    });
+    const isDifficultyFoundOnTags = difficultyTags.some(
+      (tag) => recipe.tags.indexOf(tag.id) > -1,
+    );
+
+    if (!isDifficultyFoundOnTags)
+      recipe.tags = [
+        ...recipe.tags,
+        difficultyTags.find((tag) => tag.name === 'Medium')?.id ?? '',
+      ];
+
+    const createdRecipe = await this.prismaService.recipe.create({
+      data: {
+        name: recipe.name ?? '',
+        imageUrl: recipe.imageUrl ?? '',
+        recipeSteps: recipe.recipeSteps ?? '',
+        tags: {
+          create: recipe.tags.map((tag) => ({
+            tag: {
+              connect: {
+                id: tag,
+              },
+            },
+          })),
+        },
+        ingredients: {
+          create: recipe.recipeIngredients.map((ingredient) => ({
+            ingredient: {
+              connect: {
+                id: ingredient.ingredientId,
+              },
+            },
+            quantity: ingredient.quantity,
+            measure_unit: ingredient.measure_unit,
+          })),
+        },
+      },
+    });
+    return { success: Boolean(createdRecipe) };
   }
 
   findMany({
@@ -88,7 +132,7 @@ export class RecipesService {
     });
   }
 
-  update(id: string, updateRecipeDto: UpdateRecipeDto) {
+  update(id: string, updateRecipeDto: UpdateRecipeRequestDto) {
     return { id, ...updateRecipeDto };
   }
 
