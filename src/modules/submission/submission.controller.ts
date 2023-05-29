@@ -2,6 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import {
   Body,
   Delete,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -42,6 +43,7 @@ export class SubmissionController {
 
   @Post('user')
   @Auth()
+  @HttpCode(200)
   async getOwnSubmissions(
     @Query() query: BasePaginationQueryDto,
     @Body() body: GetOwnSubmissionsRequestDto,
