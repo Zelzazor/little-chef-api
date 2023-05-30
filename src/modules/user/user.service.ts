@@ -35,7 +35,7 @@ export class UserService {
     return { success: true };
   };
   async getNewUserCount(body: GetDashboardMetricsRequestDto) {
-    const count = await this.prismaService.submission.count({
+    const count = await this.prismaService.user.count({
       where: {
         createdAt: {
           gte: body.dateRange?.startDate,
