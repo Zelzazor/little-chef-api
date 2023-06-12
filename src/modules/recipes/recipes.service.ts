@@ -68,7 +68,7 @@ export class RecipesService {
       ...(ingredients && ingredients.length > 0 && !name
         ? {
             ingredients: {
-              some: {
+              every: {
                 ingredientId: {
                   in: ingredients,
                 },
