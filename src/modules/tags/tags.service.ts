@@ -3,14 +3,31 @@ import { Tag } from '@prisma/client';
 import { PaginatedQueryResponseDto } from 'src/common/dto/paginated-query.response.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateTagDto } from './dto/create-tag.dto';
-import { UpdateTagDto } from './dto/update-tag.dto';
 import { GetTagsFilters } from './types/get-tags-filters';
 
 @Injectable()
 export class TagsService {
   constructor(private prismaService: PrismaService) {}
-  create(createTagDto: CreateTagDto) {
-    return 'This action adds a new tag';
+  async create(createTagDto: CreateTagDto) {
+    const tagType = await this.prismaService.tagType.findFirst({
+      where: {
+        name: 'Other',
+      },
+    });
+    if (!tagType) return { success: false, message: 'Tag type not found' };
+
+    const createdTag = await this.prismaService.tag.create({
+      data: {
+        name: createTagDto.name,
+        tagType: {
+          connect: {
+            id: tagType.id,
+          },
+        },
+      },
+    });
+
+    return { success: Boolean(createdTag) };
   }
 
   async findAll(
@@ -35,24 +52,12 @@ export class TagsService {
               }
             : undefined,
         },
-        orderBy: { name: 'asc' },
+        orderBy: { createdAt: 'asc' },
         include: {
           tagType: true,
         },
       },
       { page: filters.page, pageSize: filters.pageSize },
     );
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} tag`;
-  }
-
-  update(id: number, updateTagDto: UpdateTagDto) {
-    return `This action updates a #${id} tag`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} tag`;
   }
 }
