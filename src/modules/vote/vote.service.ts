@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Submission, SubmissionStatus } from '@prisma/client';
+import { SubmissionStatus } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { ExperienceService } from '../experience/experience.service';
-import { GetRandomUnvotedSubmissionResponseDto } from './dto/get-random-unvoted-submission.response.dto';
 import { VoteSubmissionResponseDTO } from './dto/vote-submission.response.dto';
 
 @Injectable()
@@ -21,9 +20,14 @@ export class VoteService {
       data: { userId, submissionId, isUpvote: !!isUpvote },
     });
 
+    this.addExperience({ userId, submissionId });
+
     this.prismaService.submissionVote
       .findMany({
         where: { submissionId },
+        include: {
+          submission: true,
+        },
       })
       .then((submissionVotes) => {
         const upvotes = submissionVotes.filter((vote) => vote.isUpvote).length;
@@ -50,9 +54,33 @@ export class VoteService {
         }
 
         if (status === SubmissionStatus.REJECTED) {
-          this.reduceExperience({ userId, submissionId });
+          this.reduceExperience({
+            userId: submissionVotes[0].submission.userId,
+            submissionId,
+          });
         }
       });
+
+    return { success: true };
+  }
+
+  async addExperience({
+    userId,
+    submissionId,
+  }: {
+    userId: string;
+    submissionId: string;
+  }) {
+    const experienceGainType =
+      await this.prismaService.experienceGainType.findFirst({
+        where: { name: 'Vote' },
+      });
+    await this.experienceService.addExperience({
+      userId,
+      amount: 10,
+      submissionId,
+      experienceGainTypeId: experienceGainType?.id ?? '',
+    });
 
     return { success: true };
   }
@@ -66,7 +94,7 @@ export class VoteService {
   }) {
     const experienceGainType =
       await this.prismaService.experienceGainType.findFirst({
-        where: { name: 'Vote' },
+        where: { name: 'Submission' },
       });
 
     const submission = await this.prismaService.submission.findUnique({
@@ -105,9 +133,7 @@ export class VoteService {
     return { success: true };
   }
 
-  async getRandomUnvotedSubmission(
-    id: string,
-  ): Promise<GetRandomUnvotedSubmissionResponseDto> {
+  async getRandomUnvotedSubmission(id: string) {
     const submissionsWithoutVotes =
       await this.prismaService.submission.findMany({
         select: {
@@ -116,9 +142,17 @@ export class VoteService {
           recipeId: true,
           createdAt: true,
           updatedAt: true,
+          recipe: {
+            select: {
+              id: true,
+              name: true,
+              imageUrl: true,
+            },
+          },
         },
         take: 5,
         where: {
+          userId: { not: id },
           votes: { none: { userId: id } },
           status: SubmissionStatus.PENDING,
         },
@@ -129,6 +163,6 @@ export class VoteService {
     );
     const unvotedSubmission = submissionsWithoutVotes[randomIndex];
 
-    return { submission: unvotedSubmission as Submission };
+    return unvotedSubmission;
   }
 }
