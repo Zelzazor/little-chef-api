@@ -3,11 +3,14 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   RawBodyRequest,
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
+import { BasePaginationQueryDto } from 'src/common/dto/base-pagination.query.dto';
 import { Auth } from '../authz/auth.decorator';
+import { Role } from '../authz/enums/role.enum';
 import { ExperienceService } from '../experience/experience.service';
 import { UpdateUserRequestDto } from './dto/update-user.request.dto';
 import { UpdateUserResponseDto } from './dto/update-user.response.dto';
@@ -43,5 +46,11 @@ export class UserController {
     };
 
     return await this.userService.updateUser(updatedUser);
+  }
+  @Get('all')
+  @Auth(Role.Admin)
+  getAllUsers(@Query() { page, pageSize }: BasePaginationQueryDto) {
+    console.log(page, pageSize);
+    return this.userService.getAllUsers({ page, pageSize });
   }
 }

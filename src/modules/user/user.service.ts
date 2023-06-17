@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Role, User } from '@prisma/client';
+import { BasePaginationQueryDto } from 'src/common/dto/base-pagination.query.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { GetDashboardMetricsRequestDto } from '../dashboard/dto/get-dashboard-metrics-request.dto';
 import { UpdateUserResponseDto } from './dto/update-user.response.dto';
@@ -45,5 +46,13 @@ export class UserService {
     });
 
     return { count };
+  }
+  async getAllUsers({ page, pageSize }: BasePaginationQueryDto) {
+    const data = await this.prismaService.findManyPaginated(
+      'user',
+      { include: { Role: true } },
+      { page: page ?? 1, pageSize: pageSize ?? 10 },
+    );
+    return data;
   }
 }
