@@ -11,18 +11,25 @@ import { Request } from 'express';
 import { BasePaginationQueryDto } from 'src/common/dto/base-pagination.query.dto';
 import { Auth } from '../authz/auth.decorator';
 import { Role } from '../authz/enums/role.enum';
+import { ExperienceService } from '../experience/experience.service';
 import { UpdateUserRequestDto } from './dto/update-user.request.dto';
 import { UpdateUserResponseDto } from './dto/update-user.response.dto';
 import { UserService } from './user.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private experienceService: ExperienceService,
+  ) {}
 
   @Get()
   @Auth()
   async getUser(@Req() request: RawBodyRequest<Request>) {
-    return request.user;
+    const experience = await this.experienceService.getExperienceData({
+      userId: request.user?.id ?? '',
+    });
+    return { ...request.user, experience };
   }
 
   @Post()

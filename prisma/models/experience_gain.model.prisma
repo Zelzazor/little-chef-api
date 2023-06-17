@@ -8,7 +8,7 @@ model ExperienceGain {
   amount Int
   userId String @db.Uuid
   submissionId String @db.Uuid
-  experienceGainTypeId String @db.Uuid @unique
+  experienceGainTypeId String @db.Uuid
   users User @relation(fields: [userId], references: [id])
   submissions Submission @relation(fields: [submissionId], references: [id])
   experienceGainType ExperienceGainType @relation(fields: [experienceGainTypeId], references: [id])
