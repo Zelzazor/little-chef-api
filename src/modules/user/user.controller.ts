@@ -1,12 +1,15 @@
+//user.controller.ts
 import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
   Query,
   RawBodyRequest,
   Req,
 } from '@nestjs/common';
+import { User } from '@prisma/client';
 import { Request } from 'express';
 import { BasePaginationQueryDto } from 'src/common/dto/base-pagination.query.dto';
 import { Auth } from '../authz/auth.decorator';
@@ -22,6 +25,12 @@ export class UserController {
     private userService: UserService,
     private experienceService: ExperienceService,
   ) {}
+
+  @Post('ban/:id')
+  @Auth(Role.Admin)
+  async banUser(@Param('id') id: string): Promise<User> {
+    return this.userService.banUser(id);
+  }
 
   @Get()
   @Auth()
@@ -52,5 +61,10 @@ export class UserController {
   getAllUsers(@Query() { page, pageSize }: BasePaginationQueryDto) {
     console.log(page, pageSize);
     return this.userService.getAllUsers({ page, pageSize });
+  }
+  @Post('unban/:id')
+  @Auth(Role.Admin)
+  async unbanUser(@Param('id') id: string): Promise<User> {
+    return this.userService.unbanUser(id);
   }
 }
