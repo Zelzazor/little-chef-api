@@ -1,3 +1,4 @@
+// user.module.ts
 import { Module } from '@nestjs/common';
 import { ExperienceModule } from '../experience/experience.module';
 import { AuthzModule } from './../authz/authz.module';

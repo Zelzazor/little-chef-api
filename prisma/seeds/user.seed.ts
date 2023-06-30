@@ -14,6 +14,7 @@ const user: User[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    bannedAt: null,
   },
   {
     id: 'd486121d-08b1-416d-a1a6-9e2ed0a695d7',
@@ -26,6 +27,7 @@ const user: User[] = [
     createdAt: new Date(),
     updatedAt: new Date(),
     deletedAt: null,
+    bannedAt: null,
   },
 ];
 
