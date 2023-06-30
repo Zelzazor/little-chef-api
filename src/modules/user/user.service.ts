@@ -1,3 +1,4 @@
+// user.service.ts
 import { Injectable } from '@nestjs/common';
 import { Role, User } from '@prisma/client';
 import { BasePaginationQueryDto } from 'src/common/dto/base-pagination.query.dto';
@@ -35,6 +36,7 @@ export class UserService {
 
     return { success: true };
   };
+
   async getNewUserCount(body: GetDashboardMetricsRequestDto) {
     const count = await this.prismaService.user.count({
       where: {
@@ -47,6 +49,7 @@ export class UserService {
 
     return { count };
   }
+
   async getAllUsers({ page, pageSize }: BasePaginationQueryDto) {
     const data = await this.prismaService.findManyPaginated(
       'user',
@@ -54,5 +57,18 @@ export class UserService {
       { page: page ?? 1, pageSize: pageSize ?? 10 },
     );
     return data;
+  }
+
+  async banUser(id: string): Promise<User> {
+    return this.prismaService.user.update({
+      where: { id },
+      data: { bannedAt: new Date() },
+    });
+  }
+  async unbanUser(id: string): Promise<User> {
+    return this.prismaService.user.update({
+      where: { id },
+      data: { bannedAt: null },
+    });
   }
 }
