@@ -1,7 +1,8 @@
 // user.service.ts
 import { Injectable } from '@nestjs/common';
-import { Role, User } from '@prisma/client';
+import { Role, User, Warning } from '@prisma/client';
 import { BasePaginationQueryDto } from 'src/common/dto/base-pagination.query.dto';
+import { PaginatedQueryResponseDto } from 'src/common/dto/paginated-query.response.dto';
 import { PrismaService } from '../../prisma/prisma.service';
 import { GetDashboardMetricsRequestDto } from '../dashboard/dto/get-dashboard-metrics-request.dto';
 import { UpdateUserResponseDto } from './dto/update-user.response.dto';
@@ -69,6 +70,30 @@ export class UserService {
     return this.prismaService.user.update({
       where: { id },
       data: { bannedAt: null },
+    });
+  }
+  async getUserWarnings(
+    id: string,
+    { page, pageSize }: BasePaginationQueryDto,
+  ): Promise<PaginatedQueryResponseDto<Warning[]>> {
+    return this.prismaService.findManyPaginated(
+      'warning',
+      {
+        where: { userId: id },
+      },
+      { page: page ?? 1, pageSize: pageSize ?? 10 },
+    );
+  }
+  async addWarning(
+    id: string,
+    warning: { description: string },
+  ): Promise<Warning> {
+    return this.prismaService.warning.create({
+      data: {
+        ...warning,
+        userId: id,
+        viewed: false,
+      },
     });
   }
 }

@@ -9,9 +9,10 @@ import {
   RawBodyRequest,
   Req,
 } from '@nestjs/common';
-import { User } from '@prisma/client';
+import { User, Warning } from '@prisma/client';
 import { Request } from 'express';
 import { BasePaginationQueryDto } from 'src/common/dto/base-pagination.query.dto';
+import { PaginatedQueryResponseDto } from 'src/common/dto/paginated-query.response.dto';
 import { Auth } from '../authz/auth.decorator';
 import { Role } from '../authz/enums/role.enum';
 import { ExperienceService } from '../experience/experience.service';
@@ -66,5 +67,21 @@ export class UserController {
   @Auth(Role.Admin)
   async unbanUser(@Param('id') id: string): Promise<User> {
     return this.userService.unbanUser(id);
+  }
+  @Get(':id/warnings')
+  @Auth()
+  async getUserWarnings(
+    @Param('id') id: string,
+    @Query() { page, pageSize }: BasePaginationQueryDto,
+  ): Promise<PaginatedQueryResponseDto<Warning[]>> {
+    return this.userService.getUserWarnings(id, { page, pageSize });
+  }
+  @Post(':id/warnings')
+  @Auth(Role.Admin)
+  async addWarning(
+    @Param('id') id: string,
+    @Body() warning: { description: string },
+  ): Promise<Warning> {
+    return this.userService.addWarning(id, warning);
   }
 }
