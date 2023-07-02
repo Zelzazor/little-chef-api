@@ -10,6 +10,13 @@ const tagTypes: TagType[] = [
     updatedAt: new Date(),
     deletedAt: null,
   },
+  {
+    id: 'a255ceb8-4fd5-43cc-8a89-e13abdd3e786',
+    name: 'Other',
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    deletedAt: null,
+  },
 ];
 
 export const tagTypesSeed: Seed = {

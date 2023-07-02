@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { experienceGainTypeSeed } from './seeds/experienceGainType.seed';
 import { ingredientsSeed } from './seeds/ingredient.seed';
 import { recipesSeed } from './seeds/recipe.seed';
 import { recipeIngredientsSeed } from './seeds/recipeIngredient.seed';
@@ -6,6 +7,7 @@ import { rolesSeed } from './seeds/role.seed';
 import { submissionSeed } from './seeds/submission.seed';
 import { submissionVoteSeed } from './seeds/submissionVote.seed';
 import { tagsSeed } from './seeds/tag.seed';
+import { tagsExperienceSeed } from './seeds/tagExperience.seed';
 import { tagTypesSeed } from './seeds/tag_type.seed';
 import { Seed } from './seeds/types';
 import { userSeed } from './seeds/user.seed';
@@ -22,6 +24,8 @@ const seeds: Seed[] = [
   submissionVoteSeed,
   tagTypesSeed,
   tagsSeed,
+  tagsExperienceSeed,
+  experienceGainTypeSeed,
 ];
 
 const seed = async () => {
